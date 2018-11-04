@@ -1,0 +1,347 @@
+@import "./animation.css";
+
+*{
+    box-sizing: border-box;
+}
+aside{
+    padding:0px 20px;
+}
+:hover{
+    cursor: pointer;
+}
+body, html{
+    margin:0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    counter-reset: li;
+}
+body{
+    background-color: rgba(0,0,0, .1);
+}
+
+.btn{
+    height: 36px;
+    line-height: 27px;
+    background-color: #f2f2f2;
+    border-radius: 2px;
+    border: 1px solid #f2f2f2;
+    font-size: 13px;
+    font-weight: bold;
+    padding:0 16px;
+}
+.btn:focus{
+    outline: none;
+}
+.clearfix:after{
+    content: '';
+    display: table;
+    clear:both;
+}
+.btn:hover{
+    box-shadow: 0 0 2px #666;
+    outline: none;
+    cursor: pointer;
+}
+
+.btn-success{
+    background: #00897b;
+    color: #fff;
+    border: 1px solid #00897b;
+}
+.form-group{
+    margin-bottom: 10px;
+}
+.form-control{
+    width: 100%;
+    padding: 8px 16px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+}
+.form-control:hover{
+    cursor:default;
+}
+.form-control:focus{
+    outline:none;
+    box-shadow: 0 4px 3px -3px rgba(0,0,0, .3);
+}
+.wrapper,
+.game-field{
+    width: 80%;
+    padding:30px;
+    margin: 50px auto;
+    background-color: #fff;
+}
+.game-field{
+    opacity: 0;
+}
+.title h1{
+    text-align: center;
+    color: #8A1253;
+    font-weight: 400;
+}
+.data-item{
+    padding:20px;
+}
+
+.description ul{
+    list-style-type: none;
+}
+.description ul li{
+    margin-bottom:10px;
+}
+.description ul li:before{
+    content: counter(li);
+    counter-increment: li;
+    text-align: center;
+    padding:2px;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+    display: block;
+    background-color: #fda403;
+    color: #fff;
+    float:left;
+}
+.intro-data{
+    float:left;
+}
+.container{
+    width: 100%;
+    min-height: 400px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom:20px;
+}
+.user-info,
+.game-details{
+    max-width: 500px;
+    margin-left:-50%;
+}
+.start{
+    display: none;
+}
+.btn:disabled{
+    filter:grayscale(100%);
+}
+.game-details{
+    margin-left:-100%;
+}
+.data-item{
+    position:absolute;
+    min-height: 300px;
+}
+form label{
+    display: block;
+    margin-bottom: 5px;
+}
+.slide-right{
+    animation-name: slideright;
+    animation-duration: .5s;
+}
+.slide-to-start{
+    animation-name: slideToStart;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+.slide-down{
+    animation-name: slideDown;
+    animation-duration: .5s;
+    animation-fill-mode:forwards;
+}
+.slide-top{
+    animation-name: slideTop;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+.shake{
+    animation: shake .5s cubic-bezier(.36, .07, .19, .97) both;
+    backface-visibility: hidden;
+    perspective: 1000px;
+    transform: translate3d(0, 0, 0);
+}
+.game-details{
+    max-width: 1000px;
+}
+.images{
+    margin-right:20px;
+    max-width:500px;
+    float:left;
+}
+.dificulty{
+    float:right;
+}
+.dificulty input{
+    display:none;
+}
+.dificulty input+label{
+    display: block;
+    position: relative;
+    float:left;
+    margin-right:10px;
+    width: 20px;
+    height: 20px;
+    background-color:#ccc;
+    border-radius: 50%;
+}
+
+.dificulty input:checked+label:before{
+    content: '';
+    display: block;
+    position: absolute;
+    top:calc(50% - 6px);
+    left:calc(50% - 6px);
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #FDA403;
+}
+.image{
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+.image img{
+    height:150px;
+}
+.image:hover img,
+.status-bar .submenu img:hover{
+    box-shadow:0 0 10px #FDA403;
+    cursor: pointer;
+}
+.selected-shirt{
+    box-shadow:0 0 10px #FDA403;
+}
+.card{
+    display: inline-block;
+    background-size:cover;
+    position: relative;
+    transition: all .5s linear;
+}
+.card.disabled{
+    opacity: .5;
+}
+.card.correct{
+    opacity: 0;
+}
+.front, 
+.back{
+    width: 100%;
+    position: absolute;
+    background-size:cover;
+    backface-visibility: hidden;
+    transition: transform .5s linear;
+    box-shadow: 0 0 5px #666;
+}
+
+.front{
+    background:#ccc;
+    transform: perspective(600px) rotateY(180deg);
+}
+.back{
+    transform: perspective(600px) rotateY(0deg);
+}
+.card.open > .front{
+    transform: perspective(600px) rotateY(0deg);
+}
+.card.open > .back{
+    transform: perspective(600px) rotateY(-180deg);
+}
+
+.status-bar{
+    padding:20px 60px;
+    font-size: 16px;
+    color:#fff;
+    background-color: #009688;
+    position: fixed;
+    top:-62px;
+    width:100%;
+    z-index: 5;
+}
+.status-bar nav > a{
+    display: inline-block;
+    font-size: 16px;
+    text-decoration: none;
+    background: none;
+    border:none;
+    color: #fff;
+    padding:1px 20px;
+}
+#timer{
+    display: inline-block;
+    min-width: 50px;
+}
+.status-bar nav > a:not(:last-child){
+    border-right:1px solid #fff;
+}
+.status-bar nav > a:last-child{
+    float:right;
+}
+.result{
+    font-size: 140px;
+    text-align: center;
+    margin:auto;
+    position: absolute;
+    width: 100%;
+    top:30%;
+}
+
+.submenu{
+    display:none;
+    position: absolute;
+    color:#333;
+    padding: 0px 39px;
+    max-width: 300px;
+    background-color:#fff;
+    left:168px;
+    top:49px;
+}
+.submenu#difficulty{
+    left:254px;
+}
+.submenu.open{
+    display: block;
+}
+.submenu ul{
+    list-style: none;
+    padding:0px;
+}
+.submenu ul li a{
+    color: #333;
+}
+.submenu ul li{
+    display: inline-block;
+    margin-bottom: 12px;
+}
+.submenu#difficulty ul li{
+    display: block;
+}
+.submenu ul li img{
+    width: 70px;
+}
+
+.top10{
+    position: fixed;
+    width: 300px;
+    top: 61px;
+    background:#fff;
+    box-shadow: 0 0 10px #333;
+    right: -310px;
+    z-index: 1;
+}
+
+.top10.show{
+    animation-name: slideFromLeft;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+.top10.hide{
+    animation-name: slideToLeft;
+    animation-duration: .5s;
+    animation-fill-mode: forwards;
+}
+.fa-bars{
+    transition: all .5s linear;
+}
+.fa-bars.open{
+    transform:rotate(90deg);
+}

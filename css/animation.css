@@ -1,0 +1,71 @@
+@keyframes slideright{
+    from { 
+        margin-left: 0;
+        opacity: 1;
+    }
+    to{ 
+        margin-left: 50%;
+        opacity: 0;
+    }
+}
+@keyframes slideFromLeft{
+    from { 
+        right: -310px;
+    }
+    to{ 
+        right: 0;
+    }
+}
+@keyframes slideToLeft{
+    from { 
+        right: 0;
+    }
+    to{ 
+        right: -310px;
+    }
+}
+@keyframes slideToStart{
+    from{
+        margin-left:-50%;
+        opacity: 0;
+    }
+    to{
+        margin-left: 0px;
+        opacity: 1;
+    }
+}
+@keyframes slideTop{
+    from{
+        margin-top:0;
+        opacity: 1;
+    }
+    to{
+        margin-top: -600px;
+        opacity: 0;
+    }
+}
+@keyframes slideDown{
+    from{
+        top: -60px;
+    }to{
+        top: 0px;
+    }
+}
+
+@keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+  
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+  
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }

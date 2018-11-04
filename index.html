@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="status-bar">
+        <nav>
+            <span id="timer">00:00</span>
+            <a href="#" id="pause"><span class="fa fa-pause"></span></a><a href="#" id="change-shirts">Shirts</a><a href="#" id="change-dificulty">Difficulty</a><a href="#" id="new-game">New</a>
+            <div class="submenu" id="shirts">
+                <ul>
+                    <li><img src="images/cards/card-1.jpg" alt=""></li>
+                    <li><img src="images/cards/card-2.jpg" alt=""></li>
+                    <li><img src="images/cards/card-3.jpg" alt=""></li>
+                    <li><img src="images/cards/card-4.jpg" alt=""></li>
+                    <li><img src="images/cards/card-5.jpg" alt=""></li>
+                    <li><img src="images/cards/card-6.jpg" alt=""></li>
+                    <li><img src="images/cards/card-7.jpg" alt=""></li>
+                    <li><img src="images/cards/card-8.jpg" alt=""></li>
+                </ul>
+            </div>
+            <div class="submenu" id="difficulty">
+                <ul>
+                    <li><a href="#">easy</a></li>
+                    <li><a href="#">normal</a></li>
+                    <li><a href="#">expert</a></li>
+                </ul>
+            </div>
+            <a href="#" id="sidebar">
+                <span class="fa fa-bars"></span>
+            </a>
+        </nav>
+    </div>
+    <aside class="top10 hide">
+        <h4>Top 10</h4>
+        <ol>
+        </ol>
+    </aside>
+    <div class="wrapper">
+        <div class="title">
+            <h1>Welcome to match-match game!</h1>
+        </div>
+        <div class="container clearfix">
+            <div class="data-item description active" id="how-to-play">
+                <h3>How to play</h3>
+                <p>
+                    <ul>
+                        <li>Select two cards to try to match the pictures</li>
+                        <li>If you match the pictures you can go again</li>
+                        <li>If they don't match the computer turn them</li>
+                        <li>The player that finds all pairs wins!</li>
+                        <li>Have fun!</li>
+                    </ul>
+                </p>
+            </div>
+            <div class="data-item user-info">
+                <h3>Enter some information about you</h3>
+                <form action="">
+                    <div class="form-group">
+                        <label for="">Your first name</label>
+                        <input type="text" id="first-name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Your last name</label>
+                        <input type="text" id="last-name" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Your email</label>
+                        <input type="email" id="email" class="form-control">
+                    </div>
+                    <button class="btn btn-success" id="save-user-info" disabled>Save</button> 
+                </form>
+            </div>
+            <div class="data-item game-details">
+                <div class="images clearfix">
+                    <h3>Game details</h3>
+                    <div class="image"><img src="images/cards/card-1.jpg" alt=""></div>
+                    <div class="image"><img src="images/cards/card-2.jpg" alt=""></div>
+                    <div class="image"><img src="images/cards/card-3.jpg" alt=""></div>
+                    <div class="image"><img src="images/cards/card-4.jpg" alt=""></div>
+                    <div class="image"><img src="images/cards/card-5.jpg" alt=""></div>
+                    <div class="image"><img src="images/cards/card-6.jpg" alt=""></div>
+                    <div class="image"><img src="images/cards/card-7.jpg" alt=""></div>
+                    <div class="image"><img src="images/cards/card-8.jpg" alt=""></div>
+                </div>
+                <div class="dificulty">
+                    <h3>Choose your <s>destany</s> dificulty</h3>
+                    <div class="form-group">
+                        <input type="radio" name="dificulty" class="dificulty-setting" id="easy">
+                        <label for="easy"></label>
+                        <span>Easy (5 x 2)</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" name="dificulty" class="dificulty-setting" id="normal">
+                        <label for="normal"></label>
+                        <span>Normal (6 x 3)</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="radio" name="dificulty" class="dificulty-setting" id="expert">
+                        <label for="expert"></label>
+                        <span>Expert (8 x 3)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-default" id="got-it">Next</button>
+        <button class="btn btn-success start" disabled>Start</button>
+    </div>
+    <div class="game-field clearfix">
+    </div>
+    <script src="js/functions.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
