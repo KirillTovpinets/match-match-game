@@ -1,26 +1,5 @@
 const { startBtn, gameTime, MAX_ID_NUMBER, preloader } = require("./constants");
 
-function onAnimationEndAction() {
-  if (this.classList.contains("slide-to-start")) {
-    return;
-  }
-  this.style.display = "none";
-  let current = document.querySelector(".active");
-  let nextItem = document.querySelector(".active + .data-item");
-  current.classList.remove("active");
-  nextItem.classList.add("slide-to-start");
-  nextItem.classList.add("active");
-  if (nextItem.classList.contains("game-details")) {
-    let nextBtn = document.querySelector("#got-it");
-    nextBtn.style.display = "none";
-    startBtn.style.display = "inline-block";
-  }
-  if (nextItem.classList.contains("user-info")) {
-    let nextBtn = document.querySelector("#got-it");
-    nextBtn.setAttribute("disabled", "");
-  }
-}
-
 function generateColors(chars) {
   let frontColor = [];
   for (let i = 0; i < 6; i++) {
@@ -106,7 +85,5 @@ function openCardAction() {
 module.exports = {
   openCardAction,
   generateColors,
-  buildGameField,
-  updateTopList,
   onAnimationEndAction,
 };

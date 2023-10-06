@@ -1,5 +1,5 @@
-import '../css/style.css';
-import { applyHanlders } from './helpers';
+import "../css/style.css";
+import { App } from "./App";
 
-applyHanlders()
-
+const app = new App();
+app.init();
