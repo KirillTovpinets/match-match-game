@@ -1,3 +1,5 @@
+import { Game } from "./Game";
+
 export class Settings {
   difficulty = null;
   cardShirt = null;
@@ -16,33 +18,40 @@ export class Settings {
   init() {
     this.startBtn.style.display = "inline-block";
     this.dificultyOptions.forEach((item) => {
-      item.addEventListener("click", this.#difficultyItemHandler);
+      item.addEventListener("click", this.#difficultyItemHandler.bind(this));
     });
 
-    this.shirts.forEach((item, index, arr) => {
-      item.addEventListener("click", this.#cardItemHandler);
+    this.shirts.forEach((item) => {
+      item.addEventListener("click", this.#cardItemHandler.bind(this));
     });
+
+    this.startBtn.addEventListener("click", this.#initGame);
+  }
+
+  #initGame() {
+    const game = new Game();
+    game.init();
   }
 
   #cardItemHandler(event) {
-    let current = document.querySelector(".selected-shirt");
-    if (current !== null) {
-      current.classList.remove("selected-shirt");
+    if (this.cardShirt) {
+      this.cardShirt.classList.remove("selected-shirt");
     }
-    const selectedShirt = this.getAttribute("src");
+    this.cardShirt = event.currentTarget;
+    const selectedShirt = this.cardShirt.getAttribute("src");
     localStorage.setItem("shirt", selectedShirt);
-    this.classList.add("selected-shirt");
-    const dificulty = document.querySelector(".dificulty input:checked");
-    if (dificulty !== null) {
-      startBtn.removeAttribute("disabled");
+    this.cardShirt.classList.add("selected-shirt");
+
+    if (this.difficulty !== null) {
+      this.startBtn.removeAttribute("disabled");
     }
   }
 
   #difficultyItemHandler(event) {
-    localStorage.setItem("difficulty", this.getAttribute("id"));
-    const card = document.querySelector(".images .selected-shirt");
-    if (card !== null) {
-      startBtn.removeAttribute("disabled");
+    this.difficulty = event.currentTarget;
+    localStorage.setItem("difficulty", this.difficulty.getAttribute("id"));
+    if (this.cardShirt !== null) {
+      this.startBtn.removeAttribute("disabled");
     }
   }
 }

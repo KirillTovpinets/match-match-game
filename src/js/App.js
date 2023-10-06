@@ -1,13 +1,10 @@
 import { Settings } from "./Settings";
-import { Time } from "./Time";
 import { UserForm } from "./UserForm";
 export class App {
   timer;
   userForm;
   settings;
-  game;
   gotItBtn = null;
-  startBtn = null;
   sideBar = null;
   pannels = [];
   activeBlock = null;
@@ -19,7 +16,6 @@ export class App {
     this.pannels = document.querySelectorAll(".data-item");
   }
   init() {
-    this.timer = new Time();
     this.gotItBtn.addEventListener("click", this.#gotItBtnHandler);
     this.pannels[0].classList.add("active");
     this.activeBlock = this.pannels[0];
@@ -54,6 +50,7 @@ export class App {
     if (nextItem.classList.contains("game-details")) {
       this.settings = new Settings();
       this.gotItBtn.style.display = "none";
+      this.settings.init();
     }
     if (nextItem.classList.contains("user-info")) {
       this.userForm = new UserForm();

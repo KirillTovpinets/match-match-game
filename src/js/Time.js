@@ -1,7 +1,11 @@
 export class Time {
   timerId = null;
 
+  timer = null;
+
   init() {
+    this.timer = document.querySelector("#timer");
+    this.timer.innerText = "00:00";
     this.timerId = setInterval(() => {
       let current = timer.innerHTML.split(":");
       let minutes = Number(current[0]);

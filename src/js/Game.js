@@ -1,5 +1,8 @@
+import { MAX_ID_NUMBER } from "./constants";
+import { Time } from "./Time";
 export class Game {
   preloader = null;
+  timer = null;
 
   constructor() {
     this.preloader = document.querySelector("#preloader");
@@ -41,14 +44,15 @@ export class Game {
   buildGameField() {
     preloader.classList.add("active");
     const statusBar = document.querySelector(".status-bar");
-    const timer = document.querySelector("#timer");
+
     let icon = document.querySelector(".fa-play");
     if (icon !== null) {
       icon.classList.add("fa-pause");
       icon.classList.remove("fa-play");
     }
 
-    timer.innerText = "00:00";
+    this.timer = new Time();
+    this.timer.init();
 
     const cardsOnField = document.querySelectorAll(".card");
     if (cardsOnField.length !== 0) {
@@ -104,7 +108,7 @@ export class Game {
       card.classList.add("card");
       card.style.marginRight = cardMargin + "px";
       card.style.marginBottom = cardMargin + "px";
-      card.addEventListener("click", openCardAction);
+      card.addEventListener("click", this.#openCardAction);
 
       let back = document.createElement("div");
       back.style.height = String(cardHeight) + "px";
@@ -159,5 +163,77 @@ export class Game {
     gameField.appendChild(row);
     row = document.createElement("div");
     gameField.style.opacity = "1";
+  }
+
+  #openCardAction() {
+    if (this.classList.contains("disabled")) {
+      return;
+    }
+    this.classList.toggle("open");
+    let alreadyOpen = document.querySelectorAll(".open:not(.correct)");
+    if (alreadyOpen.length === 2) {
+      if (
+        alreadyOpen[0].children[1].children[0].getAttribute("src") ==
+        alreadyOpen[1].children[1].children[0].getAttribute("src")
+      ) {
+        setTimeout(function () {
+          alreadyOpen.forEach(function (value, index, arr) {
+            value.classList.add("correct");
+          });
+          let remainClosed = document.querySelectorAll(".card:not(.open)");
+
+          if (remainClosed.length === 0) {
+            const userFname = localStorage.getItem("user-fname");
+            const userName = localStorage.getItem("user-name");
+            const email = localStorage.getItem("user-email");
+            clearInterval(gameTime);
+            let result = document.createElement("h4");
+            let timer = document.querySelector("#timer");
+
+            result.classList.add("result");
+            result.innerHTML = "Your time is <br/>";
+            let time = document.createElement("span");
+            time.style.color = "#F44336";
+            time.innerText = timer.innerText;
+
+            let saveData = {
+              userFname,
+              userName,
+              email,
+              time: timer.innerText,
+            };
+
+            let topList = JSON.parse(localStorage.getItem("top10"));
+            if (topList !== null) {
+              topList.push(saveData);
+            } else {
+              topList = [saveData];
+            }
+            localStorage.setItem("top10", JSON.stringify(topList));
+            updateTopList();
+            result.appendChild(time);
+            let body = document.querySelector("body");
+            body.prepend(result);
+
+            setTimeout(function () {
+              result.remove();
+            }, 2000);
+          }
+        }, 700);
+      } else {
+        setTimeout(function () {
+          alreadyOpen.forEach(function (value, index, arr) {
+            alreadyOpen[0].classList.add("shake");
+            alreadyOpen[1].classList.add("shake");
+          });
+        }, 500);
+        setTimeout(function () {
+          alreadyOpen.forEach(function (value, index, arr) {
+            value.classList.remove("open");
+            value.classList.remove("shake");
+          });
+        }, 1000);
+      }
+    }
   }
 }
