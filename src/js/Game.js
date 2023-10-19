@@ -1,13 +1,52 @@
-import { MAX_ID_NUMBER } from "./constants";
+import { Card } from "./Card";
+import { Navbar } from "./Navbar";
 import { Time } from "./Time";
+import { MAX_ID_NUMBER } from "./constants";
 export class Game {
   preloader = null;
   timer = null;
+  navbar = null;
+  fieldHeight = 0;
+  fieldHeight = 0;
+  gameField = null;
+  difficultyConfig = {
+    easy: { height: 2, width: 5 },
+    normal: { height: 3, width: 6 },
+    expert: { height: 3, width: 8 },
+  };
 
+  get totalImageCount() {
+    return this.fieldHeight * this.fieldWidth;
+  }
+
+  get containerWidth() {
+    return this.gameField.clientWidth;
+  }
+  get cardWidth() {
+    return Math.round(
+      this.containerWidth / this.fieldWidth -
+        (this.fieldWidth - 2) * this.cardMargin * 0.7
+    );
+  }
+
+  get cardHeight() {
+    return Math.round(this.cardWidth * 1.5);
+  }
+
+  get cardMargin() {
+    return this.containerWidth / this.fieldWidth / 10;
+  }
   constructor() {
     this.preloader = document.querySelector("#preloader");
+    this.gameField = document.querySelector(".game-field");
+    this.navbar = new Navbar();
   }
-  init() {
+  init(difficulty) {
+    const config = this.difficultyConfig[difficulty];
+
+    this.fieldHeight = config.height;
+    this.fieldWidth = config.width;
+
     this.updateTopList();
     this.buildGameField();
   }
@@ -64,65 +103,83 @@ export class Game {
     details.classList.add("slide-top");
 
     statusBar.classList.add("slide-down");
-    let dificulty = localStorage.getItem("difficulty");
-    let fieldWidth = 0;
-    let fieldHeight = 0;
-    let gameField = document.querySelector(".game-field");
 
-    switch (dificulty) {
-      case "easy": {
-        fieldWidth = 5;
-        fieldHeight = 2;
-        break;
-      }
-      case "normal": {
-        fieldWidth = 6;
-        fieldHeight = 3;
-        break;
-      }
-      case "expert": {
-        fieldWidth = 8;
-        fieldHeight = 3;
-        break;
-      }
-    }
-
-    const containerWidth = gameField.clientWidth;
     let row = document.createElement("div");
     row.classList.add("clearfix");
     row.style.textAlign = "center";
 
-    let cardMargin = containerWidth / fieldWidth / 10;
+    const imageFactory = this.#getImageElement();
+    for (let i = 0; i < this.totalImageCount; i++) {
+      const imageElement = imageFactory();
+      const card = new Card(
+        this.cardWidth,
+        this.cardHeight,
+        this.cardMargin,
+        imageElement
+      );
+      row.appendChild(card.valueOf());
+      if ((i + 1) % this.fieldWidth === 0 && i !== 0) {
+        this.gameField.appendChild(row);
+        row = document.createElement("div");
+        row.classList.add("clearfix");
+        row.style.textAlign = "center";
+      }
+    }
+    this.gameField.appendChild(row);
+    row = document.createElement("div");
+    this.gameField.style.opacity = "1";
+  }
 
-    const totalImageCount = fieldHeight * fieldWidth;
+  finish() {
+    this.timer.pause();
+    this.#showResults();
+  }
 
+  #showResults() {
+    const userFname = localStorage.getItem("user-fname");
+    const userName = localStorage.getItem("user-name");
+    const email = localStorage.getItem("user-email");
+    let result = document.createElement("h4");
+    let timer = document.querySelector("#timer");
+
+    result.classList.add("result");
+    result.innerHTML = "Your time is <br/>";
+    let time = document.createElement("span");
+    time.style.color = "#F44336";
+    time.innerText = timer.innerText;
+
+    let saveData = {
+      userFname,
+      userName,
+      email,
+      time: timer.innerText,
+    };
+
+    let topList = JSON.parse(localStorage.getItem("top10"));
+    if (topList !== null) {
+      topList.push(saveData);
+    } else {
+      topList = [saveData];
+    }
+    localStorage.setItem("top10", JSON.stringify(topList));
+    this.updateTopList();
+    result.appendChild(time);
+    let body = document.querySelector("body");
+    body.prepend(result);
+
+    setTimeout(function () {
+      result.remove();
+    }, 2000);
+  }
+
+  #getImageElement() {
     const imageIds = [];
     const loadedImages = [];
 
-    for (let i = 0; i < totalImageCount; i++) {
-      let cardWidth = Math.round(
-        containerWidth / fieldWidth - (fieldWidth - 2) * cardMargin * 0.7
-      );
-      let cardHeight = Math.round(cardWidth * 1.5);
-      let card = document.createElement("article");
-      card.classList.add("card");
-      card.style.marginRight = cardMargin + "px";
-      card.style.marginBottom = cardMargin + "px";
-      card.addEventListener("click", this.#openCardAction);
-
-      let back = document.createElement("div");
-      back.style.height = String(cardHeight) + "px";
-      back.classList.add("back");
-      const image = localStorage.getItem("shirt");
-      back.style.backgroundImage = `url('${image}')`;
-      back.style.backgroundPosition = "center";
-      let front = document.createElement("div");
-      front.classList.add("front");
-      front.style.height = String(cardHeight) + "px";
-
+    return () => {
       let randomId;
 
-      if (imageIds.length < totalImageCount / 2) {
+      if (imageIds.length < this.totalImageCount / 2) {
         randomId = Math.floor(Math.random() * (MAX_ID_NUMBER - 1) + 1);
         imageIds.push(randomId);
       } else {
@@ -140,100 +197,11 @@ export class Game {
         loadedImages.push(randomId);
 
         if (loadedImages.length === imageIds.length) {
-          console.log(loadedImages);
-          preloader.classList.remove("active");
+          this.preloader.classList.remove("active");
         }
       };
-      imageElement.style.height = "100%";
-      front.appendChild(imageElement);
 
-      card.appendChild(back);
-      card.appendChild(front);
-
-      card.style.width = String(cardWidth) + "px";
-      card.style.height = String(cardHeight) + "px";
-      row.appendChild(card);
-      if ((i + 1) % fieldWidth === 0 && i !== 0) {
-        gameField.appendChild(row);
-        row = document.createElement("div");
-        row.classList.add("clearfix");
-        row.style.textAlign = "center";
-      }
-    }
-    gameField.appendChild(row);
-    row = document.createElement("div");
-    gameField.style.opacity = "1";
-  }
-
-  #openCardAction() {
-    if (this.classList.contains("disabled")) {
-      return;
-    }
-    this.classList.toggle("open");
-    let alreadyOpen = document.querySelectorAll(".open:not(.correct)");
-    if (alreadyOpen.length === 2) {
-      if (
-        alreadyOpen[0].children[1].children[0].getAttribute("src") ==
-        alreadyOpen[1].children[1].children[0].getAttribute("src")
-      ) {
-        setTimeout(function () {
-          alreadyOpen.forEach(function (value, index, arr) {
-            value.classList.add("correct");
-          });
-          let remainClosed = document.querySelectorAll(".card:not(.open)");
-
-          if (remainClosed.length === 0) {
-            const userFname = localStorage.getItem("user-fname");
-            const userName = localStorage.getItem("user-name");
-            const email = localStorage.getItem("user-email");
-            clearInterval(gameTime);
-            let result = document.createElement("h4");
-            let timer = document.querySelector("#timer");
-
-            result.classList.add("result");
-            result.innerHTML = "Your time is <br/>";
-            let time = document.createElement("span");
-            time.style.color = "#F44336";
-            time.innerText = timer.innerText;
-
-            let saveData = {
-              userFname,
-              userName,
-              email,
-              time: timer.innerText,
-            };
-
-            let topList = JSON.parse(localStorage.getItem("top10"));
-            if (topList !== null) {
-              topList.push(saveData);
-            } else {
-              topList = [saveData];
-            }
-            localStorage.setItem("top10", JSON.stringify(topList));
-            updateTopList();
-            result.appendChild(time);
-            let body = document.querySelector("body");
-            body.prepend(result);
-
-            setTimeout(function () {
-              result.remove();
-            }, 2000);
-          }
-        }, 700);
-      } else {
-        setTimeout(function () {
-          alreadyOpen.forEach(function (value, index, arr) {
-            alreadyOpen[0].classList.add("shake");
-            alreadyOpen[1].classList.add("shake");
-          });
-        }, 500);
-        setTimeout(function () {
-          alreadyOpen.forEach(function (value, index, arr) {
-            value.classList.remove("open");
-            value.classList.remove("shake");
-          });
-        }, 1000);
-      }
-    }
+      return imageElement;
+    };
   }
 }

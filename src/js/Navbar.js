@@ -8,7 +8,6 @@ export class Navbar {
   }
 
   init() {
-    debugger;
     this.pauseBtn.addEventListener("click", this.#pauseBtnHandler);
     this.sideBar.addEventListener("click", this.#sidebarHandler);
   }

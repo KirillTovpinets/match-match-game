@@ -9,6 +9,10 @@ export class Settings {
 
   startBtn = null;
 
+  get difficultyValue() {
+    return this.difficulty.getAttribute("id");
+  }
+
   constructor() {
     this.dificultyOptions = document.querySelectorAll(".dificulty-setting");
     this.shirts = document.querySelectorAll(".image img");
@@ -25,12 +29,13 @@ export class Settings {
       item.addEventListener("click", this.#cardItemHandler.bind(this));
     });
 
-    this.startBtn.addEventListener("click", this.#initGame);
+    this.startBtn.addEventListener("click", this.#initGame.bind(this));
   }
 
   #initGame() {
     const game = new Game();
-    game.init();
+    game.init(this.difficultyValue);
+    window.game = game;
   }
 
   #cardItemHandler(event) {
